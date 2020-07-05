@@ -1,6 +1,6 @@
 // const url = "http://localhost:5000/"
 
-const url = "http://54.196.190.43"
+const url = "http://3.90.85.227"
 
 // export const getTemperature = async () => {
 //   const response = await fetch(

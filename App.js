@@ -71,7 +71,7 @@ const App = () => {
     AppState.addEventListener('change', _handleAppStateChange);
     dispatch({ type: "setLoading", payload: true })
     callAPI()
-    interval = setInterval(callAPI, 10000)
+    interval = setInterval(callAPI, 30000)
     return () => {
       clearInterval(interval)
       AppState.removeEventListener('change', _handleAppStateChange);
@@ -86,7 +86,7 @@ const App = () => {
     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
       console.log("App has come to the foreground!");
       callAPI()
-      interval = setInterval(callAPI, 10000)
+      interval = setInterval(callAPI, 30000)
     }
     appState.current = nextAppState
   };
