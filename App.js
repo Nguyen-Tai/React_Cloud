@@ -42,13 +42,12 @@ const reducer = (state, action) => {
     case "saveNextFromCurrent":
       return {
         ...state,
-        next:action.payload.next
+        next:action.payload
       }
     case "saveAfterFromCurrent":
-      console.log('vào after',action.payload.after)
       return {
         ...state,
-        after:action.payload.after
+        after:action.payload
       }
     default:
       return state
@@ -71,7 +70,7 @@ const App = () => {
     AppState.addEventListener('change', _handleAppStateChange);
     dispatch({ type: "setLoading", payload: true })
     callAPI()
-    interval = setInterval(callAPI, 30000)
+    interval = setInterval(callAPI, 10000)
     return () => {
       clearInterval(interval)
       AppState.removeEventListener('change', _handleAppStateChange);
@@ -86,7 +85,7 @@ const App = () => {
     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
       console.log("App has come to the foreground!");
       callAPI()
-      interval = setInterval(callAPI, 30000)
+      interval = setInterval(callAPI, 10000)
     }
     appState.current = nextAppState
   };
@@ -95,16 +94,12 @@ const App = () => {
     try 
     {
       const current = await getTemperature()
-      // const current,next,after = await Promise.all()
       current.timestamp = moment.unix(current.timestamp / 1000).format("DD MMM YYYY hh:mm:ss a")
       dispatch({ type: "saveCurrent", payload: current })
-      const next = await getNextFromCurrent()
-      console.log('next',next)
+      let next = await getNextFromCurrent()
       dispatch({type:"saveNextFromCurrent",payload:next})
-      const after = await getAfterFromCurrent()
-      console.log('after',after)
+      let after = await getAfterFromCurrent()
       dispatch({type:"saveAfterFromCurrent",payload:after})
-      console.log(current,next,after)
     }
     catch (e) {
       console.log(e)
@@ -153,10 +148,10 @@ const App = () => {
                 </Text>
               )}
 
-              {!state.error && <SearchInput
+              {/* {!state.error && <SearchInput
                 placeholder="T/H"
               // onSubmit={this.handleUpdateLocation}
-              />}
+              />} */}
 
               {!state.error && (
                 <View style={{ paddingTop: 64 }}>

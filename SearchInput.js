@@ -1,33 +1,20 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import PropTypes from 'prop-types';
 
-export default class SearchInput extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
-    };
-  }
-
+const SearchInput = (props)=>{
+  const { placeholder,onSubmit } = props;
+  const [text,setText] = useState("")
+  
   handleChangeText = text => {
-    this.setState({ text });
+    setText(text)
   };
 
   handleSubmitEditing = () => {
-    const { onSubmit } = this.props;
-    const { text } = this.state;
-
     if (!text) return;
-
     onSubmit (text);
-    this.setState({ text: '' });
+    setText("")
   };
-
-  render() {
-    const { placeholder } = this.props;
-    const { text } = this.state;
 
     return (
       <View style={styles.container}>
@@ -45,7 +32,6 @@ export default class SearchInput extends React.Component {
         />
       </View>
     );
-  }
 }
 
 SearchInput.propTypes = {
