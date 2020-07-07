@@ -1,19 +1,18 @@
 import React,{useState} from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import PropTypes from 'prop-types';
 
-const SearchInput = (props)=>{
+const SearchInput = (props) => {
   const { placeholder,onSubmit } = props;
   const [text,setText] = useState("")
   
-  handleChangeText = text => {
+  const handleChangeText = text => {
     setText(text)
   };
 
-  handleSubmitEditing = () => {
+  const handleSubmitEditing = () => {
     if (!text) return;
     onSubmit (text);
-    setText("")
+    // setText("")
   };
 
     return (
@@ -26,35 +25,29 @@ const SearchInput = (props)=>{
           underlineColorAndroid="transparent"
           textAlign="center"
           style={styles.textInput}
-          clearButtonMode="always"
-          onChangeText={this.handleChangeText}
-          onSubmitEditing={this.handleSubmitEditing}
+          // clearButtonMode="always"
+          // keyboardType={"decimal-pad"}
+          onChangeText={handleChangeText}
+          onSubmitEditing={handleSubmitEditing}
         />
       </View>
     );
 }
 
-SearchInput.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-};
-
-SearchInput.defaultProps = {
-  placeholder: '',
-};
-
 const styles = StyleSheet.create({
   container: {
-    height: 60,
+    height: 40,
     marginTop: 20,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    marginHorizontal: 40,
+    paddingHorizontal: 20,
     borderRadius: 5,
   },
   textInput: {
     flex: 1,
-    fontSize: 20,
-    color: '#222',
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.5)',
   },
 });
+
+export default SearchInput

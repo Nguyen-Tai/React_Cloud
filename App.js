@@ -12,7 +12,6 @@ import {
   AppState
 } from 'react-native';
 
-import SearchInput from './SearchInput'
 import moment from 'moment';
 import getImageForWeather from './utils/getImageForWeather'
 import getIconForWeather from './utils/getIconForWeather'
@@ -59,7 +58,10 @@ const initial = {
   temperature: null,
   created: null,
   next:null,
-  after:null
+  after:null,
+  temperatureUser:null,
+  humidityUser:null
+
 }
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initial)
@@ -84,6 +86,8 @@ const App = () => {
     }
     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
       console.log("App has come to the foreground!");
+      clearInterval(interval)
+      dispatch({ type: "setLoading", payload: true })
       callAPI()
       interval = setInterval(callAPI, 60000)
     }
@@ -117,10 +121,8 @@ const App = () => {
         style={styles.imageContainer}
         imageStyle={styles.image}
       >
-
         <View style={[styles.detailsContainer, styles.opacity(moment().hours())]}>
           <ActivityIndicator animating={state.loading} color="white" size="large" />
-
           {!state.loading && (
             <View>
               {state.error && (
@@ -141,26 +143,24 @@ const App = () => {
                   </Text>
                 </View>
               )}
-
               {!state.error && (
                 <Text style={[styles.regularText, styles.textStyle]}>
                   {`Last update:\n ${moment(state.created, "DD MMM YYYY hh:mm:ss a").startOf('second').fromNow()}`}
                 </Text>
               )}
 
-              {/* {!state.error && <SearchInput
-                placeholder="T/H"
-              // onSubmit={this.handleUpdateLocation}
-              />} */}
-
               {!state.error && (
                 <View style={{ paddingTop: 64 }}>
                   <Text style={[styles.regularText, styles.textStyle]}>
                     Next Temperature
                   </Text>
-                  <Text style={[styles.mediumText, styles.textStyle]}>
-                    {`${state.next}°`}
-                  </Text>
+                  <View>
+                    {!state.next && <ActivityIndicator animating={!state.next} color="white" size="large" style={{ paddingTop: 34 }}/>}
+                    {state.next && (<Text style={[styles.mediumText, styles.textStyle]}>
+                      {`${state.next}°`}
+                    </Text>
+                    )}
+                  </View>
                 </View>
               )}
 
@@ -169,9 +169,13 @@ const App = () => {
                   <Text style={[styles.regularText, styles.textStyle]}>
                     After 60'
                   </Text>
-                  <Text style={[styles.smallText, styles.textStyle]}>
-                    {`${state.after}°`}
-                  </Text>
+                  <View>
+                    {!state.after && <ActivityIndicator animating={!state.after} color="white" size="large" style={{ paddingTop: 34 }}/>}
+                    {state.after && (<Text style={[styles.smallText, styles.textStyle]}>
+                      {`${state.after}°`}
+                    </Text>
+                    )}
+                  </View>
                 </View>
               )}
 
